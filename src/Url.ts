@@ -1,7 +1,7 @@
 export type UrlScheme = "http" | "https" | undefined;
 export type KeyValueStore<T> = {[key: string]: T};
 
-export class Url {
+export default class Url {
 
     public static fromUrlString(inputUrl: string): Url {
 

@@ -152,4 +152,5 @@ var Url = (function () {
     };
     return Url;
 }());
-exports.Url = Url;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Url;

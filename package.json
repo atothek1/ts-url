@@ -1,0 +1,27 @@
+{
+  "name": "ts-url",
+  "version": "1.0.0",
+  "description": "A TypeScript Url object.",
+  "main": "/dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atothek1/ts-url.git"
+  },
+  "keywords": [
+    "typescript",
+    "url"
+  ],
+  "author": "Alexander Kämmerer <kaemmerer.alexander@gmail.com> (http://xzited.io/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/atothek1/ts-url/issues"
+  },
+  "homepage": "https://github.com/atothek1/ts-url#readme",
+  "devDependencies": {
+    "typescript": "^2.1.5"
+  }
+}

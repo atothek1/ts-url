@@ -9,7 +9,7 @@ export class UrlParserTest {
     public parseUrl(): any {
 
         let url: string = "http://xzited.de/";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "xzited.de",
@@ -39,7 +39,7 @@ export class UrlParserTest {
     public parseUrlWithoutScheme(): any {
 
         let url: string = "xzited.de/";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: undefined,
             authority: "xzited.de",
@@ -69,7 +69,7 @@ export class UrlParserTest {
     public parseUrlWithoutSchemeAndSlash(): any {
 
         let url: string = "xzited.de";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: undefined,
             authority: "xzited.de",
@@ -99,7 +99,7 @@ export class UrlParserTest {
     public parseIpAsUrl(): any {
 
         let url: string = "http://192.168.0.100/";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "192.168.0.100",
@@ -129,7 +129,7 @@ export class UrlParserTest {
     public parseIpAsUrlWithoutScheme(): any {
 
         let url: string = "192.168.0.100/";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: undefined,
             authority: "192.168.0.100",
@@ -159,7 +159,7 @@ export class UrlParserTest {
     public parseIpAsUrlWithPort(): any {
 
         let url: string = "http://192.168.0.100:64332/";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "192.168.0.100:64332",
@@ -189,7 +189,7 @@ export class UrlParserTest {
     public parseIpAsUrlWithUsernameAndPort(): any {
 
         let url: string = "http://testname@192.168.0.100:64332/";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname@192.168.0.100:64332",
@@ -219,7 +219,7 @@ export class UrlParserTest {
     public parseIpAsUrlWithUsernameAndPortAndFragment(): any {
 
         let url: string = "http://testname@192.168.0.100:64332/#test-info";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname@192.168.0.100:64332",
@@ -249,7 +249,7 @@ export class UrlParserTest {
     public parseIpAsUrlWithUserinfoAndPortAndFragment(): any {
 
         let url: string = "http://testname:testpass@192.168.0.100:64332#test-info";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname:testpass@192.168.0.100:64332",
@@ -279,7 +279,7 @@ export class UrlParserTest {
     public parseUrlWithSubdomain(): any {
 
         let url: string = "http://www.xzited.de/";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "www.xzited.de",
@@ -309,7 +309,7 @@ export class UrlParserTest {
     public parseUrlWithoutSchemeWithSubdomain(): any {
 
         let url: string = "www.xzited.de/";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: undefined,
             authority: "www.xzited.de",
@@ -339,7 +339,7 @@ export class UrlParserTest {
     public parseUrlWithoutSchemeAndSlashWithSubdomain(): any {
 
         let url: string = "www.api.xzited.de";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: undefined,
             authority: "www.api.xzited.de",
@@ -369,7 +369,7 @@ export class UrlParserTest {
     public parseUrlWithSubdomainAndPort(): any {
 
         let url: string = "https://www.xzited.de:8088/";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "https",
             authority: "www.xzited.de:8088",
@@ -399,7 +399,7 @@ export class UrlParserTest {
     public parseUrlWithAuth(): any {
 
         let url: string = "http://testname:testpass@xzited.de/";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname:testpass@xzited.de",
@@ -429,7 +429,7 @@ export class UrlParserTest {
     public parseUrlWithUserName(): any {
 
         let url: string = "http://testname@xzited.de/";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname@xzited.de",
@@ -459,7 +459,7 @@ export class UrlParserTest {
     public parseUrlWithAuthAndSubdomain(): any {
 
         let url: string = "http://testname:testpass@www.xzited.de/";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname:testpass@www.xzited.de",
@@ -489,7 +489,7 @@ export class UrlParserTest {
     public parseUrlWithAuthAndSubdomainAndPort(): any {
 
         let url: string = "http://testname:testpass@www.xzited.de:8088/";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname:testpass@www.xzited.de:8088",
@@ -519,7 +519,7 @@ export class UrlParserTest {
     public parseUrlWithAuthAndSubdomainAndPortAndPath(): any {
 
         let url: string = "http://testname:testpass@www.xzited.de:8088/path/to/something";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname:testpass@www.xzited.de:8088",
@@ -549,7 +549,7 @@ export class UrlParserTest {
     public parseUrlWithAuthAndSubdomainAndPortAndPathAndFile(): any {
 
         let url: string = "http://testname:testpass@www.xzited.de:8088/path/to/something/index.html";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname:testpass@www.xzited.de:8088",
@@ -579,7 +579,7 @@ export class UrlParserTest {
     public parseUrlWithAuthAndSubdomainAndPortAndPathAndFileAndHash(): any {
 
         let url: string = "http://testname:testpass@www.xzited.de:8088/path/to/something/index.html#info";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname:testpass@www.xzited.de:8088",
@@ -609,7 +609,7 @@ export class UrlParserTest {
     public parseUrlWithAuthAndSubdomainAndPortAndHash(): any {
 
         let url: string = "http://testname:testpass@www.xzited.de:8088#info";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname:testpass@www.xzited.de:8088",
@@ -639,7 +639,7 @@ export class UrlParserTest {
     public parseUrlWithAuthAndSubdomainAndPortAndQueryHash(): any {
 
         let url: string = "http://testname:testpass@www.xzited.de:8088/?filter=available&order=asc&orderBy=price#info";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname:testpass@www.xzited.de:8088",
@@ -677,7 +677,7 @@ export class UrlParserTest {
     public parseUrlWithAuthAndSubdomainAndPortAndPathAndFileAndQueryAndHash(): any {
 
         let url: string = "http://testname:testpass@www.xzited.de:8088/path/to/something/index.html?filter=available&order=asc&orderBy=price#info";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname:testpass@www.xzited.de:8088",
@@ -709,15 +709,13 @@ export class UrlParserTest {
         expect(actual.queryParameters["filter"]).to.be.equal(expected.queryParameters["filter"]);
         expect(actual.queryParameters["order"]).to.be.equal(expected.queryParameters["order"]);
         expect(actual.queryParameters["orderBy"]).to.be.equal(expected.queryParameters["orderBy"]);
-
-        console.log(actual);
     }
 
     @test("http://testname@www.xzited.de:8088/path/to/something/index.html?filter=available&order=asc&orderBy=price#info")
     public parseUrlWithUserNameAndSubdomainAndPortAndPathAndFileAndQueryAndHash(): any {
 
         let url: string = "http://testname@www.xzited.de:8088/path/to/something/index.html?filter=available&order=asc&orderBy=price#info";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname@www.xzited.de:8088",
@@ -755,7 +753,7 @@ export class UrlParserTest {
     public parseUrlWithAuthAndPortAndPathAndQueryAndHash(): any {
 
         let url: string = "http://testname:testpass@xzited.de:8088/path/to/something/?filter=available,black,new&order=asc&orderBy=price#info";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname:testpass@xzited.de:8088",
@@ -793,7 +791,7 @@ export class UrlParserTest {
     public parseUrlWithoutSchemeWithAuthAndPortAndPathAndQueryAndHash(): any {
 
         let url: string = "testname:testpass@xzited.de:8088/path/to/something/?filter=available,black,new&order=asc&orderBy=price#info";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: undefined,
             authority: "testname:testpass@xzited.de:8088",
@@ -831,7 +829,7 @@ export class UrlParserTest {
     public parseUrlWithAuthAndSubdomainAndQueryAndHash(): any {
 
         let url: string = "http://testname:testpass@www.xzited.de?filter=available&order=asc&orderBy=price#info";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname:testpass@www.xzited.de",
@@ -869,7 +867,7 @@ export class UrlParserTest {
     public parseUrlWithAuthAndSubdomainAndQuery(): any {
 
         let url: string = "http://testname:testpass@www.xzited.de?filter=available&order=asc&orderBy=price";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname:testpass@www.xzited.de",
@@ -907,7 +905,7 @@ export class UrlParserTest {
     public parseUrlWithAuthAndSubdomainAndPortAndPathAndQueryAndHash(): any {
 
         let url: string = "http://testname:testpass@www.xzited.de:8088/path/to/something/?filter=available&order=asc&orderBy=price#info";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "testname:testpass@www.xzited.de:8088",
@@ -945,7 +943,7 @@ export class UrlParserTest {
     public parseUrlWithSubdomainAndPortAndPathAndFileAndQueryAndHash(): any {
 
         let url: string = "http://www.xzited.de:8088/path/to/something/index.html?filter=available&order=asc&orderBy=price#info";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "www.xzited.de:8088",
@@ -977,15 +975,13 @@ export class UrlParserTest {
         expect(actual.queryParameters["filter"]).to.be.equal(expected.queryParameters["filter"]);
         expect(actual.queryParameters["order"]).to.be.equal(expected.queryParameters["order"]);
         expect(actual.queryParameters["orderBy"]).to.be.equal(expected.queryParameters["orderBy"]);
-
-        console.log(actual);
     }
 
     @test("http://www.xzited.de/path/to/something/index.html?filter=available&order=asc&orderBy=price#info")
     public parseUrlWithSubdomainAndPathAndFileAndQueryAndHash(): any {
 
         let url: string = "http://www.xzited.de////path//to/something///index.html?filter=available&order=asc&orderBy=price#info";
-        let expected: Url = {
+        let expected = {
             href: url,
             scheme: "http",
             authority: "www.xzited.de",
@@ -1017,8 +1013,6 @@ export class UrlParserTest {
         expect(actual.queryParameters["filter"]).to.be.equal(expected.queryParameters["filter"]);
         expect(actual.queryParameters["order"]).to.be.equal(expected.queryParameters["order"]);
         expect(actual.queryParameters["orderBy"]).to.be.equal(expected.queryParameters["orderBy"]);
-
-        console.log(actual);
     }
 
     @test
@@ -1106,9 +1100,37 @@ export class UrlParserTest {
         expect(queryParams.highlighted).to.be.equal(highlighted);
     }
 
-    private test(expected: Url, actual: Url) {
+    @test
+    public testMappingWithoutLeadingSlashWithThreeAndQuery() {
 
-        expect(actual, "actual").to.be.eql(expected);
+        let accountUuid = "e955d970-4f47-46c4-9e38-99fe546dd322";
+        let ordersUuid = "16c1ace4-fe84-4f49-906c-341cf8199643";
+        let productIndex = "123";
+        let highlighted = "true";
+
+        let href = `https://api.xzited.de:8088/v1/accounts/${accountUuid}/orders/${ordersUuid}/products/${productIndex}/?highlighted=${highlighted}`;
+        let pattern = "v1/accounts/{accountUuid}/orders/{ordersUuuid}/products/{productIndex}";
+        let url = Url.fromUrlString(href);
+        let mappings = Url.mapPathParameters(url, pattern);
+
+        expect(mappings).not.to.undefined;
+        expect(mappings).to.have.deep.property("pathParameters");
+        expect(mappings).to.have.deep.property("queryParameters");
+
+        expect(mappings.pathParameters).to.have.deep.property("accountUuid");
+        expect(mappings.pathParameters).to.have.deep.property("ordersUuuid");
+        expect(mappings.pathParameters).to.have.deep.property("productIndex");
+
+        let pathParams = mappings.pathParameters as any;
+        expect(pathParams.accountUuid).to.be.equal(accountUuid);
+        expect(pathParams.ordersUuuid).to.be.equal(ordersUuid);
+        expect(pathParams.productIndex).to.be.equal(productIndex);
+
+        let queryParams = mappings.queryParameters as any;
+        expect(queryParams.highlighted).to.be.equal(highlighted);
+    }
+
+    private test(expected, actual: Url) {
 
         expect(actual.href, "href").to.be.equal(expected.href);
         expect(actual.scheme, "scheme").to.be.equal(expected.scheme);

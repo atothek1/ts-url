@@ -5,41 +5,16 @@ export class Url {
 
     public static fromUrlString(inputUrl: string): Url {
 
-        let url = new Url(inputUrl);
-
-        let queryParts = url.getQueryParts();
-        let hostParts = url.getHostParts();
-        let hostnameParts = url.getHostnameParts();
-        let pathParts = url.getPathParts();
-        let userinfo = url.getUserinfo();
-
-        return {
-            href: inputUrl,
-            scheme: url.getScheme(),
-            authority: url.getAuthority(),
-            host: url.getHost(),
-            hostname: hostParts.hostname,
-            port: hostParts.port,
-            domain: hostnameParts.domain,
-            tld: hostnameParts.tld,
-            subdomain: hostnameParts.subdomain,
-            resource: url.getResource(),
-            directory: pathParts.directory,
-            path: pathParts.path,
-            file: pathParts.file,
-            query: queryParts.query,
-            queryParameters: queryParts.queryParameters,
-            userinfo: userinfo.userinfo,
-            username: userinfo.username,
-            password: userinfo.password,
-            fragment: url.getFragment()
-        };
+        return new Url(inputUrl);
     }
 
     // https://api.xzited.de:8088/v1/accounts/e955d970-4f47-46c4-9e38-99fe546dd322/orders/16c1ace4-fe84-4f49-906c-341cf8199643/products/1?highlight=true
     // /v1/accounts/{accountUuid}/orders/{ordersUuuid}/products/{productIndex}
     public static mapPathParameters(url: Url, pattern: string): {pathParameters: KeyValueStore<any>, queryParameters: KeyValueStore<any>} {
-        pattern = pattern.charAt(pattern.length - 1) === "/" ? pattern.substring(0, pattern.length - 1) : pattern;
+
+        pattern = pattern.charAt(0) === "/" ? pattern : "/" + pattern;
+        pattern = pattern.charAt(pattern.length - 1) !== "/" ? pattern : pattern.substring(0, pattern.length - 1);
+
         let patternParts = pattern.split("/");
         let pathParts = url.path.split("/");
         let pathParameters;
@@ -57,6 +32,7 @@ export class Url {
                 pathParameters[name] = pathParts[index];
             }
         });
+
         return {
             pathParameters: pathParameters,
             queryParameters: url.queryParameters
@@ -91,6 +67,8 @@ Url: {
 
     //#region fields
 
+    private readonly inputUrl: string;
+
     public readonly href: string;
     public readonly scheme: UrlScheme;
     public readonly authority: string;
@@ -111,25 +89,77 @@ Url: {
     public readonly password?: string;
     public readonly queryParameters?: KeyValueStore<string>;
 
-    private readonly inputUrl?: string;
+    //#endregion
+
+    //#region private ctor
+
+    private constructor(inputUrl?: string) {
+
+        this.inputUrl = this.normalizeUrl(inputUrl);
+
+        let queryParts = this.getQueryParts();
+        let hostParts = this.getHostParts();
+        let hostnameParts = this.getHostnameParts();
+        let pathParts = this.getPathParts();
+        let userinfo = this.getUserinfo();
+
+        this.href = inputUrl;
+        this.scheme = this.getScheme();
+        this.authority = this.getAuthority();
+        this.host = this.getHost();
+        this.hostname = hostParts.hostname;
+        this.port = hostParts.port;
+        this.domain = hostnameParts.domain;
+        this.tld = hostnameParts.tld;
+        this.subdomain = hostnameParts.subdomain;
+        this.resource = this.getResource();
+        this.directory = pathParts.directory;
+        this.path = pathParts.path;
+        this.file = pathParts.file;
+        this.query = queryParts.query;
+        this.queryParameters = queryParts.queryParameters;
+        this.userinfo = userinfo.userinfo;
+        this.username = userinfo.username;
+        this.password = userinfo.password;
+        this.fragment = this.getFragment();
+    }
 
     //#endregion
 
-    //#region methods as fields to make initialization instancing possible
+    //#region methods
 
-    private readonly getScheme?: Function = (): UrlScheme => {
+    private normalizeUrl(inputUrl?: string): string {
+        let parts = inputUrl.split("://");
+        let url = (parts.length === 1 ? parts[0] : parts[1]).replace(/\/\/+/g, "/");
+        return (parts.length === 1 ? "" : parts[0] + "://" ) + url;
+    }
+
+    private getScheme(): UrlScheme {
         let scheme = this.inputUrl.substr(0, this.inputUrl.indexOf("//") - 1);
         return scheme ? scheme as UrlScheme : undefined;
     }
 
-    private readonly getFragment?: Function = (): string => {
+    private getFragment(): string {
         let idx = this.inputUrl.lastIndexOf("#");
         if (idx < 0)
             return;
         return this.inputUrl.substr(idx);
     }
 
-    private readonly getQueryParts?: Function = (): {readonly query: string, readonly queryParameters: KeyValueStore<string>} => {
+    private getAuthority(): string {
+        let parts = this.inputUrl.split("://");
+        let url = parts.length === 1 ? parts[0] : parts[1];
+        let endIdx = url.indexOf("/");
+        if (endIdx < 0) {
+
+            let queryIdx = url.indexOf("?");
+            let hashIdx = queryIdx < 0 ? url.indexOf("#") : queryIdx;
+            endIdx = hashIdx < 0 ? undefined : hashIdx;
+        }
+        return url.substring(0, endIdx);
+    }
+
+    private getQueryParts(): {readonly query: string, readonly queryParameters: KeyValueStore<string>} {
 
         let queryIdx = this.inputUrl.indexOf("?");
         if (queryIdx < 0)
@@ -152,20 +182,7 @@ Url: {
         return {query: queryString, queryParameters: queryParameters};
     }
 
-    private readonly getAuthority?: Function = (): string => {
-        let parts = this.inputUrl.split("://");
-        let url = parts.length === 1 ? parts[0] : parts[1];
-        let endIdx = url.indexOf("/");
-        if (endIdx < 0) {
-
-            let queryIdx = url.indexOf("?");
-            let hashIdx = queryIdx < 0 ? url.indexOf("#") : queryIdx;
-            endIdx = hashIdx < 0 ? undefined : hashIdx;
-        }
-        return url.substring(0, endIdx);
-    }
-
-    private readonly getUserinfo?: Function = (): {userinfo: string, username: string, password: string} => {
+    private getUserinfo(): {userinfo: string, username: string, password: string} {
         let userinfo: string, username: string, password: string, rest: string;
         [userinfo, rest] = this.getAuthority().split("@");
         if (rest) {
@@ -179,17 +196,17 @@ Url: {
         return {userinfo: userinfo, username: username, password: password};
     }
 
-    private readonly getHost?: Function = (): string => {
+    private getHost(): string {
         let [user, host] = this.getAuthority().split("@");
         return host || user;
     }
 
-    private readonly getHostParts?: Function = (): {hostname: string, port: number} => {
+    private getHostParts(): {hostname: string, port: number} {
         let [hostname, port] = this.getHost().split(":");
         return {hostname: hostname, port: port ? parseInt(port) : undefined};
     }
 
-    private readonly getHostnameParts?: Function = (): {readonly subdomain: string, readonly domain: string, readonly tld: string} => {
+    private getHostnameParts(): {readonly subdomain: string, readonly domain: string, readonly tld: string} {
         let hostParts = this.getHostParts();
         let parts = hostParts.hostname.split("."), subdomain: string, domain: string, tld: string;
         if (isNaN(parseInt(parts.join("")))) {
@@ -200,7 +217,7 @@ Url: {
         return {subdomain: subdomain, domain: domain, tld: tld};
     }
 
-    private readonly getPathParts?: Function = (): {path: string, directory: string, file: string} => {
+    private getPathParts(): {path: string, directory: string, file: string} {
         let resource = this.getResource();
 
         let path = resource.indexOf("?") > 0 ? resource.substr(0, resource.indexOf("?")) : resource;
@@ -214,7 +231,7 @@ Url: {
 
     }
 
-    private readonly getResource?: Function = (): string => {
+    private getResource(): string {
         let parts = this.inputUrl.split("://");
         let url = parts.length === 1 ? parts[0] : parts[1];
         let splitIdx = url.indexOf("/");
@@ -225,18 +242,10 @@ Url: {
         return ( res.charAt(0) !== "/" ? "/" : "" ) + res;
     }
 
-    private readonly getNormalizedUrl?: Function = (inputUrl?: string): string => {
+    private getNormalizedUrl(inputUrl?: string): string {
         let parts = inputUrl.split("://");
         let url = (parts.length === 1 ? parts[0] : parts[1]).replace(/\/\/+/g, "/");
         return (parts.length === 1 ? "" : parts[0] + "://" ) + url;
-    }
-
-    //#endregion
-
-    //#region private ctor
-
-    private constructor(inputUrl?: string) {
-        this.inputUrl = this.getNormalizedUrl(inputUrl);
     }
 
     //#endregion

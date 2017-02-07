@@ -2,7 +2,7 @@ export declare type UrlScheme = "http" | "https" | undefined;
 export declare type KeyValueStore<T> = {
     [key: string]: T;
 };
-export default class Url {
+export declare class Url {
     static fromUrlString(inputUrl: string): Url;
     static mapPathParameters(url: Url, pattern: string): {
         pathParameters: KeyValueStore<any>;

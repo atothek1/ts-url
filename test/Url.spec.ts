@@ -1,6 +1,6 @@
 import {test, suite} from "mocha-typescript";
 import {expect} from "chai";
-import Url from "../src/Url";
+import {Url} from "../src/Url";
 
 @suite
 export class UrlParserTest {

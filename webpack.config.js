@@ -23,7 +23,7 @@ module.exports = {
         }]
     },
     plugins: [
-        new webpack.optimize.UglifyJsPlugin({comments: false, beautify: true}),
+        new webpack.optimize.UglifyJsPlugin({comments: false, beautify: true, mangleName: false, mangle: false, compress: false}),
         new CleanWebpackPlugin(['build'])
     ]
 };

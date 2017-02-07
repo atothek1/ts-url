@@ -1,151 +1,222 @@
-!function(t) {
-    function r(i) {
-        if (e[i]) return e[i].exports;
-        var n = e[i] = {
-            i: i,
-            l: !1,
+(function(modules) {
+    var installedModules = {};
+    function __webpack_require__(moduleId) {
+        if (installedModules[moduleId]) return installedModules[moduleId].exports;
+        var module = installedModules[moduleId] = {
+            i: moduleId,
+            l: false,
             exports: {}
         };
-        return t[i].call(n.exports, n, n.exports, r), n.l = !0, n.exports;
+        modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+        module.l = true;
+        return module.exports;
     }
-    var e = {};
-    return r.m = t, r.c = e, r.i = function(t) {
-        return t;
-    }, r.d = function(t, e, i) {
-        r.o(t, e) || Object.defineProperty(t, e, {
-            configurable: !1,
-            enumerable: !0,
-            get: i
-        });
-    }, r.n = function(t) {
-        var e = t && t.__esModule ? function() {
-            return t.default;
-        } : function() {
-            return t;
-        };
-        return r.d(e, "a", e), e;
-    }, r.o = function(t, r) {
-        return Object.prototype.hasOwnProperty.call(t, r);
-    }, r.p = "", r(r.s = 1);
-}([ function(t, r, e) {
-    "use strict";
-    var i = function() {
-        function t(t) {
-            this.inputUrl = this.normalizeUrl(t);
-            var r = this.getQueryParts(), e = this.getHostParts(), i = this.getHostnameParts(), n = this.getPathParts(), s = this.getUserinfo();
-            this.href = t, this.scheme = this.getScheme(), this.authority = this.getAuthority(), 
-            this.host = this.getHost(), this.hostname = e.hostname, this.port = e.port, this.domain = i.domain, 
-            this.tld = i.tld, this.subdomain = i.subdomain, this.resource = this.getResource(), 
-            this.directory = n.directory, this.path = n.path, this.file = n.file, this.query = r.query, 
-            this.queryParameters = r.queryParameters, this.userinfo = s.userinfo, this.username = s.username, 
-            this.password = s.password, this.fragment = this.getFragment();
+    __webpack_require__.m = modules;
+    __webpack_require__.c = installedModules;
+    __webpack_require__.i = function(value) {
+        return value;
+    };
+    __webpack_require__.d = function(exports, name, getter) {
+        if (!__webpack_require__.o(exports, name)) {
+            Object.defineProperty(exports, name, {
+                configurable: false,
+                enumerable: true,
+                get: getter
+            });
         }
-        return t.fromUrlString = function(r) {
-            return new t(r);
-        }, t.mapPathParameters = function(t, r) {
-            r = "/" === r.charAt(0) ? r : "/" + r, r = "/" !== r.charAt(r.length - 1) ? r : r.substring(0, r.length - 1);
-            var e, i = r.split("/"), n = t.path.split("/");
-            return i.forEach(function(t, r, i) {
-                if (t !== n[r]) {
-                    if (!n[r]) return;
-                    e || (e = {});
-                    var s = t.substring(1, t.length - 1);
-                    e[s] = n[r];
+    };
+    __webpack_require__.n = function(module) {
+        var getter = module && module.__esModule ? function getDefault() {
+            return module["default"];
+        } : function getModuleExports() {
+            return module;
+        };
+        __webpack_require__.d(getter, "a", getter);
+        return getter;
+    };
+    __webpack_require__.o = function(object, property) {
+        return Object.prototype.hasOwnProperty.call(object, property);
+    };
+    __webpack_require__.p = "";
+    return __webpack_require__(__webpack_require__.s = 1);
+})([ function(module, exports, __webpack_require__) {
+    "use strict";
+    var Url = function() {
+        function Url(inputUrl) {
+            this.inputUrl = this.normalizeUrl(inputUrl);
+            var queryParts = this.getQueryParts();
+            var hostParts = this.getHostParts();
+            var hostnameParts = this.getHostnameParts();
+            var pathParts = this.getPathParts();
+            var userinfo = this.getUserinfo();
+            this.href = inputUrl;
+            this.scheme = this.getScheme();
+            this.authority = this.getAuthority();
+            this.host = this.getHost();
+            this.hostname = hostParts.hostname;
+            this.port = hostParts.port;
+            this.domain = hostnameParts.domain;
+            this.tld = hostnameParts.tld;
+            this.subdomain = hostnameParts.subdomain;
+            this.resource = this.getResource();
+            this.directory = pathParts.directory;
+            this.path = pathParts.path;
+            this.file = pathParts.file;
+            this.query = queryParts.query;
+            this.queryParameters = queryParts.queryParameters;
+            this.userinfo = userinfo.userinfo;
+            this.username = userinfo.username;
+            this.password = userinfo.password;
+            this.fragment = this.getFragment();
+        }
+        Url.fromUrlString = function(inputUrl) {
+            return new Url(inputUrl);
+        };
+        Url.mapPathParameters = function(url, pattern) {
+            pattern = pattern.charAt(0) === "/" ? pattern : "/" + pattern;
+            pattern = pattern.charAt(pattern.length - 1) !== "/" ? pattern : pattern.substring(0, pattern.length - 1);
+            var patternParts = pattern.split("/");
+            var pathParts = url.path.split("/");
+            var pathParameters;
+            patternParts.forEach(function(item, index, arr) {
+                if (item !== pathParts[index]) {
+                    if (!pathParts[index]) return;
+                    if (!pathParameters) pathParameters = {};
+                    var name = item.substring(1, item.length - 1);
+                    pathParameters[name] = pathParts[index];
                 }
-            }), {
-                pathParameters: e,
-                queryParameters: t.queryParameters
+            });
+            return {
+                pathParameters: pathParameters,
+                queryParameters: url.queryParameters
             };
-        }, t.prototype.toString = function() {
+        };
+        Url.prototype.toString = function() {
             return ("\nUrl: {\n    href: " + this.href + ",\n    scheme: " + this.scheme + ",\n    authority: " + this.authority + ",\n    hostname: " + this.hostname + ",\n    port: " + this.port + ",\n    subdomain: " + this.subdomain + ",\n    domain: " + this.domain + ",\n    tld: " + this.tld + ",\n    resource: " + this.resource + ",\n    directory: " + this.directory + ",\n    path: " + this.path + ",\n    file: " + this.file + ",\n    query: " + this.query + ",\n    fragment: " + this.fragment + ",\n    userinfo: " + this.userinfo + ",\n    username: " + this.username + ",\n    password: " + this.password + "\n}").trim();
-        }, t.prototype.normalizeUrl = function(t) {
-            var r = t.split("://"), e = (1 === r.length ? r[0] : r[1]).replace(/\/\/+/g, "/");
-            return (1 === r.length ? "" : r[0] + "://") + e;
-        }, t.prototype.getScheme = function() {
-            var t = this.inputUrl.substr(0, this.inputUrl.indexOf("//") - 1);
-            return t ? t : void 0;
-        }, t.prototype.getFragment = function() {
-            var t = this.inputUrl.lastIndexOf("#");
-            if (!(t < 0)) return this.inputUrl.substr(t);
-        }, t.prototype.getAuthority = function() {
-            var t = this.inputUrl.split("://"), r = 1 === t.length ? t[0] : t[1], e = r.indexOf("/");
-            if (e < 0) {
-                var i = r.indexOf("?"), n = i < 0 ? r.indexOf("#") : i;
-                e = n < 0 ? void 0 : n;
+        };
+        Url.prototype.normalizeUrl = function(inputUrl) {
+            var parts = inputUrl.split("://");
+            var url = (parts.length === 1 ? parts[0] : parts[1]).replace(/\/\/+/g, "/");
+            return (parts.length === 1 ? "" : parts[0] + "://") + url;
+        };
+        Url.prototype.getScheme = function() {
+            var scheme = this.inputUrl.substr(0, this.inputUrl.indexOf("//") - 1);
+            return scheme ? scheme : undefined;
+        };
+        Url.prototype.getFragment = function() {
+            var idx = this.inputUrl.lastIndexOf("#");
+            if (idx < 0) return;
+            return this.inputUrl.substr(idx);
+        };
+        Url.prototype.getAuthority = function() {
+            var parts = this.inputUrl.split("://");
+            var url = parts.length === 1 ? parts[0] : parts[1];
+            var endIdx = url.indexOf("/");
+            if (endIdx < 0) {
+                var queryIdx = url.indexOf("?");
+                var hashIdx = queryIdx < 0 ? url.indexOf("#") : queryIdx;
+                endIdx = hashIdx < 0 ? undefined : hashIdx;
             }
-            return r.substring(0, e);
-        }, t.prototype.getQueryParts = function() {
-            var t = this.inputUrl.indexOf("?");
-            if (t < 0) return {
-                query: void 0,
-                queryParameters: void 0
+            return url.substring(0, endIdx);
+        };
+        Url.prototype.getQueryParts = function() {
+            var queryIdx = this.inputUrl.indexOf("?");
+            if (queryIdx < 0) return {
+                query: undefined,
+                queryParameters: undefined
             };
-            var r, e = this.inputUrl.indexOf("#"), i = this.inputUrl.substring(t + 1, e > 0 ? e : void 0);
-            if (i) {
-                r = {};
-                var n = i.split("&");
-                n.forEach(function(t) {
-                    var e, i;
-                    e = t.substr(0, t.indexOf("=")), i = t.substr(t.indexOf("=") + 1), r[e] = i;
+            var queryParameters;
+            var hashIdx = this.inputUrl.indexOf("#");
+            var queryString = this.inputUrl.substring(queryIdx + 1, hashIdx > 0 ? hashIdx : undefined);
+            if (queryString) {
+                queryParameters = {};
+                var pairs = queryString.split("&");
+                pairs.forEach(function(item) {
+                    var key, value;
+                    key = item.substr(0, item.indexOf("="));
+                    value = item.substr(item.indexOf("=") + 1);
+                    queryParameters[key] = value;
                 });
             }
             return {
-                query: i,
-                queryParameters: r
+                query: queryString,
+                queryParameters: queryParameters
             };
-        }, t.prototype.getUserinfo = function() {
-            var t, r, e, i;
-            if (s = this.getAuthority().split("@"), t = s[0], i = s[1], i) {
-                var n = t.split(":");
-                r = n[0], e = n[1];
-            } else t = void 0;
+        };
+        Url.prototype.getUserinfo = function() {
+            var userinfo, username, password, rest;
+            _a = this.getAuthority().split("@"), userinfo = _a[0], rest = _a[1];
+            if (rest) {
+                var info = userinfo.split(":");
+                username = info[0];
+                password = info[1];
+            } else userinfo = undefined;
             return {
-                userinfo: t,
-                username: r,
-                password: e
+                userinfo: userinfo,
+                username: username,
+                password: password
             };
-            var s;
-        }, t.prototype.getHost = function() {
-            var t = this.getAuthority().split("@"), r = t[0], e = t[1];
-            return e || r;
-        }, t.prototype.getHostParts = function() {
-            var t = this.getHost().split(":"), r = t[0], e = t[1];
+            var _a;
+        };
+        Url.prototype.getHost = function() {
+            var _a = this.getAuthority().split("@"), user = _a[0], host = _a[1];
+            return host || user;
+        };
+        Url.prototype.getHostParts = function() {
+            var _a = this.getHost().split(":"), hostname = _a[0], port = _a[1];
             return {
-                hostname: r,
-                port: e ? parseInt(e) : void 0
+                hostname: hostname,
+                port: port ? parseInt(port) : undefined
             };
-        }, t.prototype.getHostnameParts = function() {
-            var t, r, e, i = this.getHostParts(), n = i.hostname.split(".");
-            return isNaN(parseInt(n.join(""))) && (e = n.pop(), r = n.pop(), t = n.length > 0 ? n.join(".") : void 0), 
-            {
-                subdomain: t,
-                domain: r,
-                tld: e
-            };
-        }, t.prototype.getPathParts = function() {
-            var t = this.getResource(), r = t.indexOf("?") > 0 ? t.substr(0, t.indexOf("?")) : t;
-            r = r.lastIndexOf("#") < 0 ? r : r.substring(0, r.lastIndexOf("#"));
-            var e = r.length > 1 ? r.split("/") : [], i = e.length > 0 ? e.pop() : void 0, n = e.length > 0 ? e.join("/") : "/";
+        };
+        Url.prototype.getHostnameParts = function() {
+            var hostParts = this.getHostParts();
+            var parts = hostParts.hostname.split("."), subdomain, domain, tld;
+            if (isNaN(parseInt(parts.join("")))) {
+                tld = parts.pop();
+                domain = parts.pop();
+                subdomain = parts.length > 0 ? parts.join(".") : undefined;
+            }
             return {
-                path: r,
-                directory: n,
-                file: i ? i : void 0
+                subdomain: subdomain,
+                domain: domain,
+                tld: tld
             };
-        }, t.prototype.getResource = function() {
-            var t = this.inputUrl.split("://"), r = 1 === t.length ? t[0] : t[1], e = r.indexOf("/");
-            e = e < 0 ? r.indexOf("?") : e, e = e < 0 ? r.indexOf("#") : e;
-            var i = e < 0 ? "/" : r.substr(e);
-            return ("/" !== i.charAt(0) ? "/" : "") + i;
-        }, t.prototype.getNormalizedUrl = function(t) {
-            var r = t.split("://"), e = (1 === r.length ? r[0] : r[1]).replace(/\/\/+/g, "/");
-            return (1 === r.length ? "" : r[0] + "://") + e;
-        }, t;
+        };
+        Url.prototype.getPathParts = function() {
+            var resource = this.getResource();
+            var path = resource.indexOf("?") > 0 ? resource.substr(0, resource.indexOf("?")) : resource;
+            path = path.lastIndexOf("#") < 0 ? path : path.substring(0, path.lastIndexOf("#"));
+            var parts = path.length > 1 ? path.split("/") : [];
+            var file = parts.length > 0 ? parts.pop() : undefined;
+            var directory = parts.length > 0 ? parts.join("/") : "/";
+            return {
+                path: path,
+                directory: directory,
+                file: file ? file : undefined
+            };
+        };
+        Url.prototype.getResource = function() {
+            var parts = this.inputUrl.split("://");
+            var url = parts.length === 1 ? parts[0] : parts[1];
+            var splitIdx = url.indexOf("/");
+            splitIdx = splitIdx < 0 ? url.indexOf("?") : splitIdx;
+            splitIdx = splitIdx < 0 ? url.indexOf("#") : splitIdx;
+            var res = splitIdx < 0 ? "/" : url.substr(splitIdx);
+            return (res.charAt(0) !== "/" ? "/" : "") + res;
+        };
+        Url.prototype.getNormalizedUrl = function(inputUrl) {
+            var parts = inputUrl.split("://");
+            var url = (parts.length === 1 ? parts[0] : parts[1]).replace(/\/\/+/g, "/");
+            return (parts.length === 1 ? "" : parts[0] + "://") + url;
+        };
+        return Url;
     }();
-    r.Url = i;
-}, function(t, r, e) {
+    exports.Url = Url;
+}, function(module, exports, __webpack_require__) {
     "use strict";
-    function i(t) {
-        for (var e in t) r.hasOwnProperty(e) || (r[e] = t[e]);
+    function __export(m) {
+        for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
     }
-    i(e(0));
+    __export(__webpack_require__(0));
 } ]);

@@ -1,1 +1,2 @@
-export * from "./Url";
+import Url from "./Url";
+export = Url;

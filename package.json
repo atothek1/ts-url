@@ -6,8 +6,8 @@
   "module": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/tsc"
+    "test": "mocha --opts mocha.opts",
+    "build": "npm test && ./node_modules/.bin/tsc"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,10 @@
   },
   "homepage": "https://github.com/atothek1/ts-url#readme",
   "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "mocha-typescript": "^1.0.18",
+    "ts-node": "^2.0.0",
     "typescript": "^2.1.5"
   }
 }

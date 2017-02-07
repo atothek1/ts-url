@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "A TypeScript Url object.",
   "main": "./dist/Url.js",
-  "module": "./dist/index.js",
-  "typings": "./dist/index.d.ts",
+  "module": "./dist/Url.js",
+  "typings": "./dist/Url.d.ts",
   "scripts": {
     "test": "mocha --opts mocha.opts",
-    "build": "npm test && webpack"
+    "build": "npm test && ./node_modules/.bin/tsc ./src/Url.ts --outDir ./dist --declaration"
   },
   "repository": {
     "type": "git",
@@ -25,12 +25,9 @@
   "homepage": "https://github.com/atothek1/ts-url#readme",
   "devDependencies": {
     "chai": "^3.5.0",
-    "clean-webpack-plugin": "^0.1.15",
     "mocha": "^3.2.0",
     "mocha-typescript": "^1.0.18",
-    "ts-loader": "^2.0.0",
     "ts-node": "^2.0.0",
-    "typescript": "^2.1.5",
-    "webpack": "^2.2.1"
+    "typescript": "^2.1.5"
   }
 }

@@ -1130,6 +1130,58 @@ export class UrlParserTest {
         expect(queryParams.highlighted).to.be.equal(highlighted);
     }
 
+    @test
+    public testReadmeExample() {
+
+        let href = "https://api.example.com/v1/accounts/8d82bb29-fde3-4271-a57a-f4b702f3b734?orders=true";
+
+        let expected = {
+            href: href,
+            scheme: "https",
+            authority: "api.example.com",
+            host: "api.example.com",
+            hostname: "api.example.com",
+            port: undefined,
+            domain: "example",
+            tld: "com",
+            subdomain: "api",
+            resource: "/v1/accounts/8d82bb29-fde3-4271-a57a-f4b702f3b734?orders=true",
+            directory: "/v1/accounts",
+            path: "/v1/accounts/8d82bb29-fde3-4271-a57a-f4b702f3b734",
+            file: "8d82bb29-fde3-4271-a57a-f4b702f3b734",
+            query: "orders=true",
+            queryParameters: {
+                orders: "true"
+            },
+            userinfo: undefined,
+            username: undefined,
+            password: undefined,
+            fragment: undefined
+        };
+        let actual = Url.fromUrlString(href);
+
+        this.test(expected, actual);
+
+        expect(actual.queryParameters["orders"]).to.be.equal(expected.queryParameters["orders"]);
+
+        let pattern = "/v1/accounts/{accountId}";
+        let params = Url.mapPathParameters(actual, pattern);
+
+
+        expect(params).not.to.undefined;
+        expect(params).to.have.deep.property("pathParameters");
+        expect(params).to.have.deep.property("queryParameters");
+
+        expect(params.pathParameters).to.have.deep.property("accountId");
+        expect(params.queryParameters).to.have.deep.property("orders");
+
+        let pathParams = params.pathParameters as any;
+        expect(pathParams.accountId).to.be.equal("8d82bb29-fde3-4271-a57a-f4b702f3b734");
+
+        let queryParams = params.queryParameters as any;
+        expect(queryParams.orders).to.be.equal("true");
+    }
+
     private test(expected, actual: Url) {
 
         expect(actual.href, "href").to.be.equal(expected.href);

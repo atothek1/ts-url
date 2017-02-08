@@ -15,5 +15,5 @@ let href = "https://api.example.com/v1/accounts/8d82bb29-fde3-4271-a57a-f4b702f3
 let url = Url.fromUrlString( href );
 let pattern = "/v1/accounts/{accountId}";
 // will get a object with mapped pathParameters and queryParameters seperated
-let url = Url.mapPathParameters( url, pattern );
+let params = Url.mapPathParameters( url, pattern );
 ```

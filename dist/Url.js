@@ -1,4 +1,61 @@
 "use strict";
+var TypeConverter = (function () {
+    function TypeConverter() {
+    }
+    TypeConverter.convertType = function (value, converter) {
+        if (converter.indexOf("bool") >= 0)
+            return TypeConverter.toBool(value.trim());
+        if (converter.indexOf("uint") >= 0)
+            return TypeConverter.toUint(value.trim());
+        if (converter.indexOf("int") >= 0)
+            return TypeConverter.toInt(value.trim());
+        if (converter.indexOf("number") >= 0)
+            return TypeConverter.toNumber(value.trim());
+        if (converter.indexOf("array") >= 0)
+            return TypeConverter.toArray(value.trim(), converter);
+        if (converter.indexOf("map") >= 0)
+            return TypeConverter.toMap(value.trim(), converter);
+        return value;
+    };
+    TypeConverter.toBool = function (value) {
+        switch (value) {
+            case "0":
+            case "1":
+                return Boolean(parseInt(value));
+            case "true":
+                return true;
+            case "false":
+                return false;
+            default:
+                return Boolean(value);
+        }
+    };
+    TypeConverter.toInt = function (value) {
+        return parseInt(value);
+    };
+    TypeConverter.toUint = function (value) {
+        return Math.abs(parseInt(value));
+    };
+    TypeConverter.toNumber = function (value) {
+        return parseFloat(value);
+    };
+    TypeConverter.toArray = function (value, typeConverter) {
+        var delimiter = typeConverter.length === 5 ? "," : typeConverter.charAt(5);
+        return value.split(delimiter);
+    };
+    TypeConverter.toMap = function (value, typeConverter) {
+        var delimiter = typeConverter.length === 3 ? "," : typeConverter.charAt(3);
+        var keyValueList = value.split(delimiter);
+        var res = {};
+        for (var i = 0, len = keyValueList.length; i < len;) {
+            res[keyValueList[i]] = keyValueList[i + 1];
+            i += 2;
+        }
+        return res;
+    };
+    return TypeConverter;
+}());
+exports.TypeConverter = TypeConverter;
 var Url = (function () {
     //#endregion
     //#region private ctor
@@ -32,7 +89,15 @@ var Url = (function () {
     Url.fromUrlString = function (inputUrl) {
         return new Url(inputUrl);
     };
+    // supported type converters: bool, int, uint, number, array, map, uuid
+    // {paramName:bool}
+    // {paramName:int}
+    // {paramName:uint}
+    // {paramName:number}
+    // {paramName:array} (, is default delimiter), {paramName:array;}, {paramName:array#}
+    // {paramName:map} (, is default delimiter), {paramName:map;}, {paramName:map#} is a pair mapping, => key,value,key,value,key,value ...
     // https://api.xzited.de:8088/v1/accounts/e955d970-4f47-46c4-9e38-99fe546dd322/orders/16c1ace4-fe84-4f49-906c-341cf8199643/products/1?highlight=true
+    // /v1/accounts/{accountUuid}/orders/{ordersUuuid}/products/{productIndex}
     // /v1/accounts/{accountUuid}/orders/{ordersUuuid}/products/{productIndex}
     Url.mapPathParameters = function (url, pattern) {
         pattern = pattern.charAt(0) === "/" ? pattern : "/" + pattern;
@@ -46,8 +111,12 @@ var Url = (function () {
                     return;
                 if (!pathParameters)
                     pathParameters = {};
-                var name_1 = item.substring(1, item.length - 1);
-                pathParameters[name_1] = pathParts[index];
+                // extract name, type converter
+                var cleanedPattern = void 0, name_1, converter = void 0;
+                cleanedPattern = item.trim().substring(1, item.length - 1);
+                name_1 = cleanedPattern.substr(0, cleanedPattern.indexOf(":") > -1 ? cleanedPattern.indexOf(":") : cleanedPattern.length);
+                converter = cleanedPattern.substr(cleanedPattern.indexOf(":") + 1);
+                pathParameters[name_1.trim()] = converter ? TypeConverter.convertType(decodeURIComponent(pathParts[index]), converter) : pathParts[index];
             }
         });
         return {

@@ -5,6 +5,8 @@ import {Url} from "../src/Url";
 @suite
 export class UrlParserTest {
 
+    //#region Url.fromUrlString() tests
+
     @test("http://xzited.de/")
     public parseUrl(): any {
 
@@ -1015,6 +1017,10 @@ export class UrlParserTest {
         expect(actual.queryParameters["orderBy"]).to.be.equal(expected.queryParameters["orderBy"]);
     }
 
+    //#endregion
+
+    //#region Url.mapPathParameters() tests
+
     @test
     public testMappingWithoutAny() {
 
@@ -1129,6 +1135,453 @@ export class UrlParserTest {
         let queryParams = mappings.queryParameters as any;
         expect(queryParams.highlighted).to.be.equal(highlighted);
     }
+
+    @test
+    public testMappinghWithThreeAndQueryAndTypeConverter() {
+
+        let accountUuid = "e955d970-4f47-46c4-9e38-99fe546dd322";
+        let ordersUuid = "16c1ace4-fe84-4f49-906c-341cf8199643";
+        let productIndex = 123;
+        let highlighted = "true";
+
+        let href = `https://api.xzited.de:8088/v1/accounts/${accountUuid}/orders/${ordersUuid}/products/${productIndex}/?highlighted=${highlighted}`;
+        let pattern = "/v1/accounts/{accountUuid:uuid}/orders/{ordersUuuid:uuid}/products/{productIndex:int}";
+        let url = Url.fromUrlString(href);
+        let mappings = Url.mapPathParameters(url, pattern);
+
+        expect(mappings).not.to.undefined;
+        expect(mappings).to.have.deep.property("pathParameters");
+        expect(mappings).to.have.deep.property("queryParameters");
+
+        expect(mappings.pathParameters).to.have.deep.property("accountUuid");
+        expect(mappings.pathParameters).to.have.deep.property("ordersUuuid");
+        expect(mappings.pathParameters).to.have.deep.property("productIndex");
+
+        let pathParams = mappings.pathParameters as any;
+        expect(pathParams.accountUuid).to.be.equal(accountUuid);
+        expect(pathParams.ordersUuuid).to.be.equal(ordersUuid);
+        expect(pathParams.productIndex).to.be.equal(productIndex);
+
+        let queryParams = mappings.queryParameters as any;
+        expect(queryParams.highlighted).to.be.equal(highlighted);
+    }
+
+    //#endregion
+
+    //#region Url.mapPathParameters()  boolean tests
+    @test
+    public testMappingWithOneBoolean1() {
+
+        let boolValue = "1"
+        let expectedValue = true;
+
+        let href = `https://api.xzited.de:8088/v1/test/${boolValue}/`;
+        let pattern = "/v1/test/{active:bool}";
+        let url = Url.fromUrlString(href);
+        let mappings = Url.mapPathParameters(url, pattern);
+
+        expect(mappings).not.to.undefined;
+        expect(mappings).to.have.deep.property("pathParameters");
+        expect(mappings).to.have.deep.property("queryParameters");
+
+        expect(mappings.pathParameters).not.to.be.undefined;
+        expect(mappings.queryParameters).to.be.undefined;
+
+
+        let pathParams = mappings.pathParameters as any;
+        expect(pathParams).to.have.deep.property("active");
+        expect(pathParams.active).to.be.equal(expectedValue);
+        expect(pathParams.active).to.be.true;
+        expect(pathParams.active).to.be.a("boolean");
+    }
+
+    @test
+    public testMappingWithOneBoolean0() {
+
+        let boolValue = "0"
+        let expectedValue = false;
+
+        let href = `https://api.xzited.de:8088/v1/test/${boolValue}/`;
+        let pattern = "/v1/test/{active:bool}";
+        let url = Url.fromUrlString(href);
+        let mappings = Url.mapPathParameters(url, pattern);
+
+        expect(mappings).not.to.undefined;
+        expect(mappings).to.have.deep.property("pathParameters");
+        expect(mappings).to.have.deep.property("queryParameters");
+
+        expect(mappings.pathParameters).not.to.be.undefined;
+        expect(mappings.queryParameters).to.be.undefined;
+
+
+        let pathParams = mappings.pathParameters as any;
+        expect(pathParams).to.have.deep.property("active");
+        expect(pathParams.active).to.be.equal(expectedValue);
+        expect(pathParams.active).to.be.false;
+        expect(pathParams.active).to.be.a("boolean");
+    }
+
+    @test
+    public testMappingWithOneBooleanTrue() {
+
+        let boolValue = "true"
+        let expectedValue = true;
+
+        let href = `https://api.xzited.de:8088/v1/test/${boolValue}/`;
+        let pattern = "/v1/test/{active:bool}";
+        let url = Url.fromUrlString(href);
+        let mappings = Url.mapPathParameters(url, pattern);
+
+        expect(mappings).not.to.undefined;
+        expect(mappings).to.have.deep.property("pathParameters");
+        expect(mappings).to.have.deep.property("queryParameters");
+
+        expect(mappings.pathParameters).not.to.be.undefined;
+        expect(mappings.queryParameters).to.be.undefined;
+
+
+        let pathParams = mappings.pathParameters as any;
+        expect(pathParams).to.have.deep.property("active");
+        expect(pathParams.active).to.be.equal(expectedValue);
+        expect(pathParams.active).to.be.true;
+        expect(pathParams.active).to.be.a("boolean");
+    }
+
+    @test
+    public testMappingWithOneBooleanFalse() {
+
+        let boolValue = "false"
+        let expectedValue = false;
+
+        let href = `https://api.xzited.de:8088/v1/test/${boolValue}/`;
+        let pattern = "/v1/test/{active:bool}";
+        let url = Url.fromUrlString(href);
+        let mappings = Url.mapPathParameters(url, pattern);
+
+        expect(mappings).not.to.undefined;
+        expect(mappings).to.have.deep.property("pathParameters");
+        expect(mappings).to.have.deep.property("queryParameters");
+
+        expect(mappings.pathParameters).not.to.be.undefined;
+        expect(mappings.queryParameters).to.be.undefined;
+
+
+        let pathParams = mappings.pathParameters as any;
+        expect(pathParams).to.have.deep.property("active");
+        expect(pathParams.active).to.be.equal(expectedValue);
+        expect(pathParams.active).to.be.false;
+        expect(pathParams.active).to.be.a("boolean");
+    }
+
+    //#endregion
+
+    //#region Url.mapPathParameters()  int tests
+
+    @test
+    public testMappingWithTwoInt() {
+
+        let positiveIntValue = "1234567890"
+        let expectedPositiveIntValue = 1234567890;
+
+        let negativeIntValue = "-1234567890"
+        let expectedNegativeIntValue = -1234567890;
+
+        let href = `https://api.xzited.de:8088/v1/test/${positiveIntValue}/${negativeIntValue}/`;
+        let pattern = "/v1/test/{positive:int}/{negative:int}";
+        let url = Url.fromUrlString(href);
+        let mappings = Url.mapPathParameters(url, pattern);
+
+        expect(mappings).not.to.undefined;
+        expect(mappings).to.have.deep.property("pathParameters");
+        expect(mappings).to.have.deep.property("queryParameters");
+
+        expect(mappings.pathParameters).not.to.be.undefined;
+        expect(mappings.queryParameters).to.be.undefined;
+
+
+        let pathParams = mappings.pathParameters as any;
+        expect(pathParams).to.have.deep.property("positive");
+        expect(pathParams).to.have.deep.property("negative");
+        expect(pathParams.positive).to.be.equal(expectedPositiveIntValue);
+        expect(pathParams.negative).to.be.equal(expectedNegativeIntValue);
+
+        expect(pathParams.positive).to.be.a("number");
+        expect(pathParams.negative).to.be.a("number");
+    }
+
+    @test
+    public testMappingWithTwoIntOneNaN() {
+
+        let positiveIntValue = "1234567890"
+        let expectedPositiveIntValue = 1234567890;
+
+        let negativeIntValue = "-iii1234567890adfdfzzz"
+
+        let href = `https://api.xzited.de:8088/v1/test/${positiveIntValue}/${negativeIntValue}/`;
+        let pattern = "/v1/test/{positive:int}/{negative:int}";
+        let url = Url.fromUrlString(href);
+        let mappings = Url.mapPathParameters(url, pattern);
+
+        expect(mappings).not.to.undefined;
+        expect(mappings).to.have.deep.property("pathParameters");
+        expect(mappings).to.have.deep.property("queryParameters");
+
+        expect(mappings.pathParameters).not.to.be.undefined;
+        expect(mappings.queryParameters).to.be.undefined;
+
+
+        let pathParams = mappings.pathParameters as any;
+        expect(pathParams).to.have.deep.property("positive");
+        expect(pathParams).to.have.deep.property("negative");
+        expect(pathParams.positive).to.be.equal(expectedPositiveIntValue);
+
+        expect(pathParams.positive).to.be.an("number");
+        expect(pathParams.negative).to.satisfy(v => isNaN(v));
+    }
+
+    //#endregion
+
+    //#region Url.mapPathParameters()  uint tests
+
+    @test
+    public testMappingWithTwoUint() {
+
+        let positiveIntValue = "1234567890"
+        let expectedPositiveIntValue = 1234567890;
+
+        let negativeIntValue = "-1234567890"
+        let expectedNegativeIntValue = 1234567890;
+
+        let href = `https://api.xzited.de:8088/v1/test/${positiveIntValue}/${negativeIntValue}/`;
+        let pattern = "/v1/test/{positive:uint}/{negative:uint}";
+        let url = Url.fromUrlString(href);
+        let mappings = Url.mapPathParameters(url, pattern);
+
+        expect(mappings).not.to.undefined;
+        expect(mappings).to.have.deep.property("pathParameters");
+        expect(mappings).to.have.deep.property("queryParameters");
+
+        expect(mappings.pathParameters).not.to.be.undefined;
+        expect(mappings.queryParameters).to.be.undefined;
+
+        let pathParams = mappings.pathParameters as any;
+        expect(pathParams).to.have.deep.property("positive");
+        expect(pathParams).to.have.deep.property("negative");
+        expect(pathParams.positive).to.be.least(0);
+        expect(pathParams.negative).to.be.least(0);
+        expect(pathParams.positive).to.be.equal(expectedPositiveIntValue);
+        expect(pathParams.negative).to.be.equal(expectedNegativeIntValue);
+
+
+        expect(pathParams.positive).to.be.a("number");
+        expect(pathParams.negative).to.be.a("number");
+    }
+
+    @test
+    public testMappingWithTwoUintOneNaN() {
+
+        let positiveIntValue = "1234567890"
+        let expectedPositiveIntValue = 1234567890;
+
+        let negativeIntValue = "-iii1234567890adfdfzzz"
+
+        let href = `https://api.xzited.de:8088/v1/test/${positiveIntValue}/${negativeIntValue}/`;
+        let pattern = "/v1/test/{positive:uint}/{negative:uint}";
+        let url = Url.fromUrlString(href);
+        let mappings = Url.mapPathParameters(url, pattern);
+
+        expect(mappings).not.to.undefined;
+        expect(mappings).to.have.deep.property("pathParameters");
+        expect(mappings).to.have.deep.property("queryParameters");
+
+        expect(mappings.pathParameters).not.to.be.undefined;
+        expect(mappings.queryParameters).to.be.undefined;
+
+
+        let pathParams = mappings.pathParameters as any;
+        expect(pathParams).to.have.deep.property("positive");
+        expect(pathParams).to.have.deep.property("negative");
+        expect(pathParams.positive).to.be.least(0);
+        expect(pathParams.positive).to.be.equal(expectedPositiveIntValue);
+
+        expect(pathParams.positive).to.be.an("number");
+        expect(pathParams.negative).to.satisfy(v => isNaN(v));
+    }
+
+    //#endregion
+
+    //#region Url.mapPathParameters()  number tests
+
+    @test
+    public testMappingWithTwoNumber() {
+
+        let positiveIntValue = "1234.567890"
+        let expectedPositiveIntValue = 1234.567890;
+
+        let negativeIntValue = "-1234.567890"
+        let expectedNegativeIntValue = -1234.567890;
+
+        let href = `https://api.xzited.de:8088/v1/test/${positiveIntValue}/${negativeIntValue}/`;
+        let pattern = "/v1/test/{positive:number}/{negative:number}";
+        let url = Url.fromUrlString(href);
+        let mappings = Url.mapPathParameters(url, pattern);
+
+        expect(mappings).not.to.undefined;
+        expect(mappings).to.have.deep.property("pathParameters");
+        expect(mappings).to.have.deep.property("queryParameters");
+
+        expect(mappings.pathParameters).not.to.be.undefined;
+        expect(mappings.queryParameters).to.be.undefined;
+
+
+        let pathParams = mappings.pathParameters as any;
+        expect(pathParams).to.have.deep.property("positive");
+        expect(pathParams).to.have.deep.property("negative");
+        expect(pathParams.positive).to.be.equal(expectedPositiveIntValue);
+        expect(pathParams.negative).to.be.equal(expectedNegativeIntValue);
+
+        expect(pathParams.positive).to.be.a("number");
+        expect(pathParams.negative).to.be.a("number");
+    }
+
+    @test
+    public testMappingWithTwoNumberOneNaN() {
+
+        let positiveIntValue = "1234.567890"
+        let expectedPositiveIntValue = 1234.567890;
+
+        let negativeIntValue = "-iii12345678.90adfdfzzz"
+
+        let href = `https://api.xzited.de:8088/v1/test/${positiveIntValue}/${negativeIntValue}/`;
+        let pattern = "/v1/test/{positive:number}/{negative:number}";
+        let url = Url.fromUrlString(href);
+        let mappings = Url.mapPathParameters(url, pattern);
+
+        expect(mappings).not.to.undefined;
+        expect(mappings).to.have.deep.property("pathParameters");
+        expect(mappings).to.have.deep.property("queryParameters");
+
+        expect(mappings.pathParameters).not.to.be.undefined;
+        expect(mappings.queryParameters).to.be.undefined;
+
+
+        let pathParams = mappings.pathParameters as any;
+        expect(pathParams).to.have.deep.property("positive");
+        expect(pathParams).to.have.deep.property("negative");
+        expect(pathParams.positive).to.be.equal(expectedPositiveIntValue);
+
+        expect(pathParams.positive).to.be.an("number");
+        expect(pathParams.negative).to.satisfy(v => isNaN(v));
+    }
+
+    //#endregion
+
+    //#region array
+
+    @test
+    public testMappingWithArrayDefaultDelimiter() {
+
+        let expected = [123, 456, 789, "abc", "def", "ghi", true, false]
+        let expectedAsString = encodeURIComponent(expected.join(","));
+        let expectedParsed = decodeURIComponent(expectedAsString).split(",");
+
+        let href = `https://api.xzited.de:8088/v1/test/${expectedAsString}/`;
+        let pattern = "/v1/test/{infos:array}/";
+        let url = Url.fromUrlString(href);
+        let actual = Url.mapPathParameters(url, pattern);
+
+        expect(actual).not.to.undefined;
+        expect(actual).to.have.deep.property("pathParameters");
+        expect(actual).to.have.deep.property("queryParameters");
+
+        expect(actual.pathParameters).not.to.be.undefined;
+        expect(actual.queryParameters).to.be.undefined;
+
+
+        let pathParams = actual.pathParameters as any;
+        expect(pathParams.infos).to.be.instanceOf(Array);
+        expect(pathParams.infos).to.be.eql(expectedParsed);
+    }
+
+    @test
+    public testMappingWithArrayCustomDelimiterColon() {
+
+        let expected = [123, 456, 789, "abc", "def", "ghi", true, false]
+        let expectedAsString = encodeURIComponent(expected.join(":"));
+        let expectedParsed = decodeURIComponent(expectedAsString).split(":");
+
+        let href = `https://api.xzited.de:8088/v1/test/${expectedAsString}/`;
+        let pattern = "/v1/test/{infos:array:}/";
+        let url = Url.fromUrlString(href);
+        let actual = Url.mapPathParameters(url, pattern);
+
+        expect(actual).not.to.undefined;
+        expect(actual).to.have.deep.property("pathParameters");
+        expect(actual).to.have.deep.property("queryParameters");
+
+        expect(actual.pathParameters).not.to.be.undefined;
+        expect(actual.queryParameters).to.be.undefined;
+
+
+        let pathParams = actual.pathParameters as any;
+        expect(pathParams.infos).to.be.instanceOf(Array);
+        expect(pathParams.infos).to.be.eql(expectedParsed);
+    }
+
+    //#endregion
+
+    //#region map
+
+    @test
+    public testMappingWithMapDefaultDelimiter() {
+
+        let params = [ "id", 123, "costs", 456, "orderId", 789, "name", "Alex", "autologin", true, "newsletter", false ];
+        let expected = { id: "123", costs: "456", orderId: "789", "name": "Alex", autologin: "true", newsletter: "false" }
+        let expectedAsString = encodeURIComponent(params.join(","));
+
+        let href = `https://api.xzited.de:8088/v1/test/${expectedAsString}/`;
+        let pattern = "/v1/test/{infos:map}/";
+        let url = Url.fromUrlString(href);
+        let actual = Url.mapPathParameters(url, pattern);
+
+        expect(actual).not.to.undefined;
+        expect(actual).to.have.deep.property("pathParameters");
+        expect(actual).to.have.deep.property("queryParameters");
+
+        expect(actual.pathParameters).not.to.be.undefined;
+        expect(actual.queryParameters).to.be.undefined;
+
+
+        let pathParams = actual.pathParameters as any;
+        expect(pathParams.infos).to.be.eql(expected);
+    }
+
+    @test
+    public testMappingWithMapCustomDelimiterSemicolon() {
+
+        let params = [ "id", 123, "costs", 456, "orderId", 789, "name", "Alex", "autologin", true, "newsletter", false ];
+        let expected = { id: "123", costs: "456", orderId: "789", "name": "Alex", autologin: "true", newsletter: "false" }
+        let expectedAsString = encodeURIComponent(params.join(";"));
+
+        let href = `https://api.xzited.de:8088/v1/test/${expectedAsString}/`;
+        let pattern = "/v1/test/{infos:map;}/";
+        let url = Url.fromUrlString(href);
+        let actual = Url.mapPathParameters(url, pattern);
+
+        expect(actual).not.to.undefined;
+        expect(actual).to.have.deep.property("pathParameters");
+        expect(actual).to.have.deep.property("queryParameters");
+
+        expect(actual.pathParameters).not.to.be.undefined;
+        expect(actual.queryParameters).to.be.undefined;
+
+
+        let pathParams = actual.pathParameters as any;
+        expect(pathParams.infos).to.be.eql(expected);
+    }
+
+    //#endregion
+
 
     @test
     public testReadmeExample() {

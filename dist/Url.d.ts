@@ -2,6 +2,15 @@ export declare type UrlScheme = "http" | "https" | undefined;
 export declare type KeyValueStore<T> = {
     [key: string]: T;
 };
+export declare class TypeConverter {
+    static convertType(value: string, converter: string): any;
+    static toBool(value: string): boolean;
+    static toInt(value: string): number;
+    static toUint(value: string): number;
+    static toNumber(value: string): number;
+    static toArray(value: string, typeConverter: string): any[];
+    static toMap(value: string, typeConverter: string): {};
+}
 export declare class Url {
     static fromUrlString(inputUrl: string): Url;
     static mapPathParameters(url: Url, pattern: string): {

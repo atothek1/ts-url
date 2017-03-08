@@ -1,6 +1,75 @@
 export type UrlScheme = "http" | "https" | undefined;
 export type KeyValueStore<T> = {[key: string]: T};
 
+export class TypeConverter {
+
+    public static convertType(value: string, converter: string): any {
+
+        if (converter.indexOf("bool") >= 0)
+            return TypeConverter.toBool(value.trim());
+
+        if (converter.indexOf("uint") >= 0)
+            return TypeConverter.toUint(value.trim());
+
+        if (converter.indexOf("int") >= 0)
+            return TypeConverter.toInt(value.trim());
+
+        if (converter.indexOf("number") >= 0)
+            return TypeConverter.toNumber(value.trim());
+
+        if (converter.indexOf("array") >= 0)
+            return TypeConverter.toArray(value.trim(), converter);
+
+        if (converter.indexOf("map") >= 0)
+            return TypeConverter.toMap(value.trim(), converter);
+
+        return value;
+    }
+
+    public static toBool(value: string): boolean {
+        switch (value) {
+            case "0":
+            case "1":
+                return Boolean(parseInt(value));
+            case "true":
+                return true;
+            case "false":
+                return false;
+            default:
+                return Boolean(value);
+        }
+    }
+
+    public static toInt(value: string): number {
+        return parseInt(value);
+    }
+
+    public static toUint(value: string): number {
+        return Math.abs(parseInt(value));
+    }
+
+    public static toNumber(value: string): number {
+        return parseFloat(value);
+    }
+
+    public static toArray(value: string, typeConverter: string): any[] {
+        let delimiter = typeConverter.length === 5 ? "," : typeConverter.charAt(5);
+        return value.split(delimiter);
+    }
+
+    public static toMap(value: string, typeConverter: string): {} {
+        let delimiter = typeConverter.length === 3 ? "," : typeConverter.charAt(3);
+        let keyValueList = value.split(delimiter);
+        let res = {};
+        for (let i = 0, len = keyValueList.length; i < len;) {
+            res[keyValueList[i]] = keyValueList[i+1];
+            i += 2;
+        }
+        return res;
+    }
+}
+
+
 export class Url {
 
     public static fromUrlString(inputUrl: string): Url {
@@ -8,7 +77,15 @@ export class Url {
         return new Url(inputUrl);
     }
 
+    // supported type converters: bool, int, uint, number, array, map, uuid
+    // {paramName:bool}
+    // {paramName:int}
+    // {paramName:uint}
+    // {paramName:number}
+    // {paramName:array} (, is default delimiter), {paramName:array;}, {paramName:array#}
+    // {paramName:map} (, is default delimiter), {paramName:map;}, {paramName:map#} is a pair mapping, => key,value,key,value,key,value ...
     // https://api.xzited.de:8088/v1/accounts/e955d970-4f47-46c4-9e38-99fe546dd322/orders/16c1ace4-fe84-4f49-906c-341cf8199643/products/1?highlight=true
+    // /v1/accounts/{accountUuid}/orders/{ordersUuuid}/products/{productIndex}
     // /v1/accounts/{accountUuid}/orders/{ordersUuuid}/products/{productIndex}
     public static mapPathParameters(url: Url, pattern: string): {pathParameters: KeyValueStore<any>, queryParameters: KeyValueStore<any>} {
 
@@ -19,6 +96,7 @@ export class Url {
         let pathParts = url.path.split("/");
         let pathParameters;
 
+
         patternParts.forEach((item, index, arr) => {
             if (item !== pathParts[index]) {
 
@@ -28,8 +106,13 @@ export class Url {
                 if (!pathParameters)
                     pathParameters = {};
 
-                let name = item.substring(1, item.length - 1);
-                pathParameters[name] = pathParts[index];
+                // extract name, type converter
+                let cleanedPattern, name, converter;
+                cleanedPattern = item.trim().substring(1, item.length - 1);
+                name = cleanedPattern.substr(0, cleanedPattern.indexOf(":") > -1 ? cleanedPattern.indexOf(":") : cleanedPattern.length);
+                converter = cleanedPattern.substr(cleanedPattern.indexOf(":") + 1);
+
+                pathParameters[name.trim()] = converter ? TypeConverter.convertType(decodeURIComponent(pathParts[index]), converter) : pathParts[index];
             }
         });
 
